@@ -106,11 +106,10 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 	}
 
 	function column_tix_domain( $item ) {
-		$url = parse_url( esc_url_raw( get_home_url( $item->blog_id ) ) );
-		if ( isset( $url['host'] ) ) {
-			$link = add_query_arg( 'tix_log_blog_id', $item->blog_id, admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
-			return sprintf( '<a href="%s">%s</a>', esc_url( $link ), $url['host'] );
-		}
+		$url = str_replace( array( 'http://', 'https://' ), '', esc_url( get_home_url( $item->blog_id ) ) );
+		$link = add_query_arg( 'tix_log_blog_id', $item->blog_id, admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
+
+		return sprintf( '<a href="%s">%s</a>', esc_url( $link ), $url );
 	}
 
 	function column_default( $item, $column_name ) {
