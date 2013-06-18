@@ -158,8 +158,8 @@ class CampTix_Network_Tools {
 		);
 
 		if ( $post_id ) {
-			$entry['post_id'] = $post_id;
-			$entry['edit_post_link'] = esc_url_raw( add_query_arg( array( 'post' => $post_id, 'action' => 'edit' ), admin_url( 'post.php' ) ) );
+			$entry['post_id'] = absint( $post_id );
+			$entry['edit_post_link'] = esc_url_raw( add_query_arg( array( 'post' => absint( $post_id ), 'action' => 'edit' ), admin_url( 'post.php' ) ) );
 		}
 
 		// Error-log log
@@ -185,9 +185,9 @@ class CampTix_Network_Tools {
 						"The following CampTix log entry matches an expression you've subscribed to.\n\nSite: %s\nMessage: %s\nRegular Expression: %s\nTimestamp: %s\n\nMore information is available in the Network Log: <%s>",
 						get_bloginfo( 'name' ),
 						esc_html( $message ),
-						$expression,
+						esc_html( $expression ),
 						date( 'Y-m-d H:i:s' ),	// assumes MySQL timezone matches PHP timezone, and that next clock tick hasn't occurred after record insertion
-						add_query_arg( array( 'tix_section' => 'log', 'page' => 'camptix-dashboard', 's' => 'id:' . $camptix->tmp( 'last_log_id' ) ), get_admin_url() )	// assumes recipient has access to Network Log
+						add_query_arg( array( 'tix_section' => 'log', 'page' => 'camptix-dashboard', 's' => 'id:' . absint( $camptix->tmp( 'last_log_id' ) ) ), get_admin_url() )	// assumes recipient has access to Network Log
 					);
 
 					wp_mail( $addresses, 'CampTix Log Notification', $email_body );
