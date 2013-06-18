@@ -24,11 +24,18 @@ class CampTix_Network_Tools {
 		$this->options = array_merge( array(
 			'db_version' => 0,
 		), get_site_option( 'camptix_nt_options', array() ) );
+		$this->options = $this->validate_options( $this->options );
 
 		if ( $this->options['db_version'] != $this->db_version ) {
 			$this->upgrade();
 			update_site_option( 'camptix_nt_options', $this->options );
 		}
+	}
+
+	function validate_options( $options ) {
+		$options['db_version'] = absint( $options['db_version'] );
+
+		return $options;
 	}
 
 	function upgrade() {
