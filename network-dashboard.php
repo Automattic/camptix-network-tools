@@ -345,7 +345,7 @@ class CampTix_Network_Dashboard {
 			}
 			</style>
 			<pre id="tix-dashboard-txn-info"><?php 
-				esc_html( print_r( $txn, true ) );	//@todo echo
+				echo esc_html( print_r( $txn, true ) );
 			?></pre>
 		<?php endif; ?>
 		<?php
