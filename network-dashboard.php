@@ -254,7 +254,7 @@ class CampTix_Network_Dashboard {
 			<?php $this->list_table->search_box( 'Search Events', 'events' ); ?>
 			<?php $this->list_table->display(); ?>
 		</form>
-		<p class="description">Please note that the network report is cached and updated once every hour. Last updated: <acronym class="tix-tooltip" title="<?php echo esc_attr( $last_updated_ago ); ?>"><?php echo $last_updated; ?></acronym>.</p>
+		<p class="description">Please note that the network report is cached and updated once every hour. Last updated: <acronym class="tix-tooltip" title="<?php echo esc_attr( $last_updated_ago ); ?>"><?php echo esc_html( $last_updated ); ?></acronym>.</p>
 		<?php
 	}
 
@@ -340,7 +340,7 @@ class CampTix_Network_Dashboard {
 			}
 			</style>
 			<pre id="tix-dashboard-txn-info"><?php 
-				print_r($txn); 
+				esc_html( print_r( $txn, true ) );
 			?></pre>
 		<?php endif; ?>
 		<?php
@@ -354,7 +354,7 @@ class CampTix_Network_Dashboard {
 		<form method="POST">
 			<label class="description">Search Query:</label>
 			<input type="hidden" name="tix_dashboard_attendee_lookup_submit" value="1" />
-			<input type="text" name="s" placeholder="Name, e-mail, twitter, URL, ..." value="<?php echo esc_attr( $search_query ); ?>" />
+			<input type="text" name="s" placeholder="Name, e-mail, twitter, URL, ..." value="<?php echo esc_attr( $search_query ); ?>" />	<?php // TODO nonces ?>
 			<input type="submit" value="Lookup" class="button-primary" />
 		</form>
 		
