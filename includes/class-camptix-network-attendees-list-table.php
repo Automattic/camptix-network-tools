@@ -21,7 +21,7 @@ class CampTix_Network_Attendees_List_Table extends WP_List_Table {
 		$search_query = trim( $_POST['s'] );
 		$results = array();
 
-			$blogs = $wpdb->get_col( $wpdb->prepare(
+		$blogs = $wpdb->get_col( $wpdb->prepare(
 			"SELECT blog_id FROM `{$wpdb->blogs}` WHERE site_id = %d ORDER BY last_updated DESC LIMIT %d;",
 			$wpdb->siteid,
 			apply_filters( 'camptix_nt_attendee_list_blog_limit', 1000 )
