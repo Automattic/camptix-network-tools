@@ -29,11 +29,11 @@ class CampTix_Network_Dashboard {
 		$events = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'tix_event';" );
 		if ( is_array( $events ) && count( $events ) > 0 ) {
 			$events_ids = implode( ',', $events );
-			$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE post_id IN ( $events_ids );" );
-			$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE ID IN ( $events_ids );" );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM %s WHERE post_id IN ( %s );", $wpdb->postmeta, $events_ids ) );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM %s WHERE ID IN ( %s );", $wpdb->posts, $events_ids ) );
 		}
 
-		$blogs = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = '{$wpdb->siteid}' LIMIT 1000;" );
+		$blogs = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM %s WHERE site_id = '%s' LIMIT 1000;", $wpdb->blogs ), $wpdb->siteid );	// todo change to %d
 		foreach ( $blogs as $bid ) {
 			switch_to_blog( $bid );
 
