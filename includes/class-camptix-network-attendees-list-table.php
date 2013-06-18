@@ -17,6 +17,7 @@ class CampTix_Network_Attendees_List_Table extends WP_List_Table {
 
 		if ( ! isset( $_POST['s'] ) || empty( $_POST['s'] ) )
 			return;
+		check_admin_referer( 'dashboard_attendees_search_query', 'dashboard_attendees_search_query_nonce' );
 
 		$search_query = trim( $_POST['s'] );
 		$results = array();

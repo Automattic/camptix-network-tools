@@ -247,9 +247,10 @@ class CampTix_Network_Dashboard {
 		}
 		</style>
 		<?php /* $this->list_table->views(); */ ?>
-		<form id="posts-filter" action="" method="get">		<?php //todo nonces ?>
+		<form id="posts-filter" action="" method="get">
 			<input type="hidden" name="page" value="camptix-dashboard" />
 			<input type="hidden" name="tix_section" value="overview" />
+			<?php wp_nonce_field( 'dashboard_overview_search_events', 'dashboard_overview_search_events_nonce' ); ?>
 
 			<?php $this->list_table->search_box( 'Search Events', 'events' ); ?>
 			<?php $this->list_table->display(); ?>
@@ -284,9 +285,10 @@ class CampTix_Network_Dashboard {
 			color: #D54E21;
 		}
 		</style>
-		<form id="posts-filter" action="" method="get">		<?php //@todo nonces ?>
+		<form id="posts-filter" action="" method="get">
 			<input type="hidden" name="page" value="camptix-dashboard" />
 			<input type="hidden" name="tix_section" value="log" />
+			<?php wp_nonce_field( 'dashboard_log_search_logs', 'dashboard_log_search_logs_nonce' ); ?>
 
 			<?php $this->list_table->search_box( 'Search Logs', 'logs' ); ?>
 			<?php $this->list_table->display(); ?>
@@ -305,7 +307,9 @@ class CampTix_Network_Dashboard {
 		$creds = isset( $_POST['tix_dashboard_credentials'] ) ? $_POST['tix_dashboard_credentials'] : false;
 		?>
 		<form method="POST">
-			<input type="hidden" name="tix_dashboard_txn_lookup_submit" value="1" />		<?php // TODO nonces ?>
+			<input type="hidden" name="tix_dashboard_txn_lookup_submit" value="1" />
+			<?php wp_nonce_field( 'dashboard_transactions_id_lookup', 'dashboard_transactions_id_lookup_nonce' ); ?>
+
 			<select name="tix_dashboard_credentials">
 			<?php foreach ( $this->get_paypal_credentials() as $key => $value ) : ?>
 				<option <?php selected( $creds, $key ); ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value['label'] ); ?></option>
@@ -317,6 +321,7 @@ class CampTix_Network_Dashboard {
 		<?php
 		$txn = false;
 		if ( isset( $_POST['tix_dashboard_txn_lookup_submit'] ) && $txn_id && $creds ) {
+			check_admin_referer( 'dashboard_transactions_id_lookup', 'dashboard_transactions_id_lookup_nonce' );
 			$credentials = $this->get_paypal_credentials();
 			if ( ! isset( $credentials[$_POST['tix_dashboard_credentials']] ) )
 				return;
@@ -340,7 +345,7 @@ class CampTix_Network_Dashboard {
 			}
 			</style>
 			<pre id="tix-dashboard-txn-info"><?php 
-				esc_html( print_r( $txn, true ) );
+				esc_html( print_r( $txn, true ) );	//@todo echo
 			?></pre>
 		<?php endif; ?>
 		<?php
@@ -354,8 +359,9 @@ class CampTix_Network_Dashboard {
 		<form method="POST">
 			<label class="description">Search Query:</label>
 			<input type="hidden" name="tix_dashboard_attendee_lookup_submit" value="1" />
-			<input type="text" name="s" placeholder="Name, e-mail, twitter, URL, ..." value="<?php echo esc_attr( $search_query ); ?>" />	<?php // TODO nonces ?>
+			<input type="text" name="s" placeholder="Name, e-mail, twitter, URL, ..." value="<?php echo esc_attr( $search_query ); ?>" />
 			<input type="submit" value="Lookup" class="button-primary" />
+			<?php wp_nonce_field( 'dashboard_attendees_search_query', 'dashboard_attendees_search_query_nonce' ); ?>
 		</form>
 		
 		<?php if ( isset( $_POST['tix_dashboard_attendee_lookup_submit'], $_POST['s'] ) ) : ?>

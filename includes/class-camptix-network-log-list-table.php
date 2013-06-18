@@ -20,6 +20,7 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 		$where = ' WHERE 1=1 ';
 
 		if ( isset( $_REQUEST['s'] ) ) {
+			check_admin_referer( 'dashboard_log_search_logs', 'dashboard_log_search_logs_nonce' );
 			$s = $_REQUEST['s'];
 			$advanced_query = explode( ':', $s );
 

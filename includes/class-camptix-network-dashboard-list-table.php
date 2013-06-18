@@ -100,7 +100,10 @@ class CampTix_Network_Dashboard_List_Table extends WP_List_Table {
 		$args['order'] = ( isset( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], array( 'asc', 'desc' ) ) ) ? $_REQUEST['order'] : 'asc';
 		
 		if ( isset( $_REQUEST['s'] ) )
+		{
+			check_admin_referer( 'dashboard_overview_search_events', 'dashboard_overview_search_events_nonce' );
 			$args['s'] = $_REQUEST['s'];
+		}
 		
 		$query = new WP_Query( $args );
 		$this->items = $query->posts;
