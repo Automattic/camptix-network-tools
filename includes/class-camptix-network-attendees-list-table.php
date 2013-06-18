@@ -97,7 +97,7 @@ class CampTix_Network_Attendees_List_Table extends WP_List_Table {
 		if ( isset( $meta['tix_email'], $meta['tix_email'][0] ) && is_email( $meta['tix_email'][0] ) )
 			$email = $meta['tix_email'][0];
 
-		return sprintf( '<a href="mailto:%s">%s</a>', $email, $email );
+		return sprintf( '<a href="mailto:%s">%s</a>', esc_attr( $email ), esc_html( $email ) );
 	}
 	
 	function column_tix_event( $item ) {
