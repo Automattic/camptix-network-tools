@@ -359,20 +359,20 @@ class CampTix_Network_Dashboard {
 		</form>
 		
 		<?php if ( isset( $_POST['tix_dashboard_attendee_lookup_submit'], $_POST['s'] ) ) : ?>
-		<style>
-		#tix-dashboard-attendees-table {
-			margin-top: 20px;
-		}
-		#tix-dashboard-attendees-table .tablenav {
-			display: none;
-		}
-		</style>
-		<div id="tix-dashboard-attendees-table">
-			<?php if ( count( $this->list_table->items ) >= $this->list_table->max_results ) : ?>
-			<p class="description">Please note, that for performance reasons, we don't show more than <?php echo absint( $this->list_table->max_results ); ?> results.</p>
-			<?php endif; ?>
-			<?php $this->list_table->display(); ?>
-		</div>
+			<style>
+			#tix-dashboard-attendees-table {
+				margin-top: 20px;
+			}
+			#tix-dashboard-attendees-table .tablenav {
+				display: none;
+			}
+			</style>
+			<div id="tix-dashboard-attendees-table">
+				<?php if ( count( $this->list_table->items ) >= $this->list_table->max_results ) : ?>
+					<p class="description">Please note, that for performance reasons, we don't show more than <?php echo absint( $this->list_table->max_results ); ?> results.</p>
+				<?php endif; ?>
+				<?php $this->list_table->display(); ?>
+			</div>
 		<?php endif; ?>
 		<?php
 	}
