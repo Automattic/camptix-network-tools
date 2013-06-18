@@ -29,8 +29,8 @@ class CampTix_Network_Dashboard {
 		$events = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'tix_event';" );
 		if ( is_array( $events ) && count( $events ) > 0 ) {
 			$events_ids = implode( ',', $events );
-			$wpdb->query( $wpdb->prepare( "DELETE FROM `{$wpdb->postmeta}` WHERE post_id IN ( '%s' );", $events_ids ) );
-			$wpdb->query( $wpdb->prepare( "DELETE FROM `{$wpdb->posts}` WHERE ID IN ( '%s' );", $events_ids ) );
+			$wpdb->query( "DELETE FROM `{$wpdb->postmeta}` WHERE post_id IN ( $events_ids );" );
+			$wpdb->query( "DELETE FROM `{$wpdb->posts}` WHERE ID IN ( $events_ids );" );
 		}
 
 		$blogs = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM `{$wpdb->blogs}` WHERE site_id = %d LIMIT 1000;", $wpdb->siteid ) );
@@ -247,7 +247,7 @@ class CampTix_Network_Dashboard {
 		}
 		</style>
 		<?php /* $this->list_table->views(); */ ?>
-		<form id="posts-filter" action="" method="get">
+		<form id="posts-filter" action="" method="get">		<?php //todo nonces ?>
 			<input type="hidden" name="page" value="camptix-dashboard" />
 			<input type="hidden" name="tix_section" value="overview" />
 
@@ -284,7 +284,7 @@ class CampTix_Network_Dashboard {
 			color: #D54E21;
 		}
 		</style>
-		<form id="posts-filter" action="" method="get">
+		<form id="posts-filter" action="" method="get">		<?php //@todo nonces ?>
 			<input type="hidden" name="page" value="camptix-dashboard" />
 			<input type="hidden" name="tix_section" value="log" />
 
