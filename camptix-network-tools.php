@@ -187,7 +187,15 @@ class CampTix_Network_Tools {
 						esc_html( $message ),
 						esc_html( $expression ),
 						date( 'Y-m-d H:i:s' ),	// assumes MySQL timezone matches PHP timezone, and that next clock tick hasn't occurred after record insertion
-						add_query_arg( array( 'tix_section' => 'log', 'page' => 'camptix-dashboard', 's' => 'id:' . absint( $camptix->tmp( 'last_log_id' ) ) ), get_admin_url() )	// assumes recipient has access to Network Log
+						add_query_arg(
+							array(
+								'tix_section' => 'log',
+								'page' => 'camptix-dashboard',
+								's' => 'id:' . absint( $camptix->tmp( 'last_log_id' ) ),
+								'dashboard_log_search_logs_nonce' => wp_create_nonce( 'dashboard_log_search_logs' ),
+							),
+							get_admin_url()
+						)	// assumes recipient has access to Network Log
 					);
 
 					wp_mail( $addresses, 'CampTix Log Notification', $email_body );
