@@ -29,8 +29,8 @@ class CampTix_Network_Dashboard {
 		$events = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'tix_event';" );
 		if ( is_array( $events ) && count( $events ) > 0 ) {
 			$events_ids = implode( ',', $events );
-			$wpdb->query( $wpdb->prepare( "DELETE FROM `{$wpdb->postmeta}` WHERE post_id IN ( %s );", $events_ids ) );
-			$wpdb->query( $wpdb->prepare( "DELETE FROM `{$wpdb->posts}` WHERE ID IN ( %s );", $events_ids ) );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM `{$wpdb->postmeta}` WHERE post_id IN ( '%s' );", $events_ids ) );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM `{$wpdb->posts}` WHERE ID IN ( '%s' );", $events_ids ) );
 		}
 
 		$blogs = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM `{$wpdb->blogs}` WHERE site_id = %d LIMIT 1000;", $wpdb->siteid ) );
