@@ -19,7 +19,7 @@ Tools for managing CampTix installations across a WordPress Multisite network.
 	* View and search log entries
 	* Lookup transactions details
 	* Lookup attendee details
-* Log events are captured and stored in the database
+* Log events are captured and stored in a global database table instead of individual site postmeta tables
 * Receive e-mail notifications when log events match your custom patterns
 
 *Note: This plugin requires a [WordPress Multisite](http://codex.wordpress.org/Glossary#Multisite) installation in order to work.*
