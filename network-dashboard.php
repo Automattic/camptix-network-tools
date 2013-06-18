@@ -33,7 +33,7 @@ class CampTix_Network_Dashboard {
 			$wpdb->query( $wpdb->prepare( "DELETE FROM %s WHERE ID IN ( %s );", $wpdb->posts, $events_ids ) );
 		}
 
-		$blogs = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM %s WHERE site_id = '%s' LIMIT 1000;", $wpdb->blogs ), $wpdb->siteid );	// todo change to %d
+		$blogs = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM %s WHERE site_id = %d LIMIT 1000;", $wpdb->blogs ), $wpdb->siteid );
 		foreach ( $blogs as $bid ) {
 			switch_to_blog( $bid );
 
