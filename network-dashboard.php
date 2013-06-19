@@ -305,19 +305,27 @@ class CampTix_Network_Dashboard {
 	function render_dashboard_txn_lookup() {
 		$txn_id = isset( $_POST['tix_txn_id'] ) ? $_POST['tix_txn_id'] : false;
 		$creds = isset( $_POST['tix_dashboard_credentials'] ) ? $_POST['tix_dashboard_credentials'] : false;
+		$available_credentials = $this->get_paypal_credentials();
 		?>
-		<form method="POST">
-			<input type="hidden" name="tix_dashboard_txn_lookup_submit" value="1" />
-			<?php wp_nonce_field( 'dashboard_transactions_id_lookup', 'dashboard_transactions_id_lookup_nonce' ); ?>
 
-			<select name="tix_dashboard_credentials">
-			<?php foreach ( $this->get_paypal_credentials() as $key => $value ) : ?>
-				<option <?php selected( $creds, $key ); ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value['label'] ); ?></option>
-			<?php endforeach; ?>
-			</select>
-			<input type="text" name="tix_txn_id" placeholder="Transaction ID" autocomplete="off" value="<?php echo esc_attr( $txn_id ); ?>" />
-			<input type="submit" value="Lookup" class="button-primary" />
-		</form>
+		<?php if ( $available_credentials ) : ?>
+			<form method="POST">
+				<input type="hidden" name="tix_dashboard_txn_lookup_submit" value="1" />
+				<?php wp_nonce_field( 'dashboard_transactions_id_lookup', 'dashboard_transactions_id_lookup_nonce' ); ?>
+
+				<select name="tix_dashboard_credentials">
+					<?php foreach ( $available_credentials as $key => $value ) : ?>
+						<option <?php selected( $creds, $key ); ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value['label'] ); ?></option>
+					<?php endforeach; ?>
+				</select>
+
+				<input type="text" name="tix_txn_id" placeholder="Transaction ID" autocomplete="off" value="<?php echo esc_attr( $txn_id ); ?>" />
+				<input type="submit" value="Lookup" class="button-primary" />
+			</form>
+		<?php else : ?>
+			No payment gateway credentials were found. Please see <a href="<?php echo esc_url( CampTix_Network_Tools::PLUGIN_URL ); ?>/faq/">the FAQ</a> for details on setting up credentials.
+		<?php endif; ?>
+
 		<?php
 		$txn = false;
 		if ( isset( $_POST['tix_dashboard_txn_lookup_submit'] ) && $txn_id && $creds ) {

@@ -13,6 +13,7 @@
 class CampTix_Network_Tools {
 	private $options;
 	private $db_version = 20130618;
+	const PLUGIN_URL = "http://wordpress.org/plugins/camptix-network-tools";
 
 	function __construct() {
 		add_action( 'init',             array( $this, 'init' ) );
