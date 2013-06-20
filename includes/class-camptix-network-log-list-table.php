@@ -26,10 +26,10 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 			switch ( $advanced_query[0] ) {
 				case 'id':
 					$this->log_highlight_id = absint( $advanced_query[1] );
-					$range = ceil( $per_page / 2 );
+					$range = floor( $per_page / 2 );
 
 					$advanced_query_value1 = $this->log_highlight_id - $range;
-					$advanced_query_value2 = $this->log_highlight_id + $range;
+					$advanced_query_value2 = $this->log_highlight_id + $range - 1;	// - 1 to avoid pagination
 					$advanced_query = "OR id BETWEEN %d AND %d";
 				break;
 
