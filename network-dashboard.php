@@ -5,7 +5,7 @@ class CampTix_Network_Dashboard {
 	protected $debug = false;
 
 	function __construct() {
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'init', array( $this, 'init' ) );
 
 		$this->schedule_events();
@@ -195,7 +195,7 @@ class CampTix_Network_Dashboard {
 			$url = add_query_arg( array(
 				'tix_section' => $section_key,
 				'page' => 'camptix-dashboard',
-			), admin_url( 'index.php' ) );
+			), network_admin_url( 'index.php' ) );
 			echo '<a class="nav-tab ' . $active . '" href="' . esc_url( $url ) . '">' . esc_html( $section_caption ) . '</a>';
 		}
 	}

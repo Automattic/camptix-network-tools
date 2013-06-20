@@ -195,7 +195,7 @@ class CampTix_Network_Tools {
 								's' => 'id:' . absint( $camptix->tmp( 'last_log_id' ) ),
 								'dashboard_log_search_logs_nonce' => wp_create_nonce( 'dashboard_log_search_logs' ),
 							),
-							get_admin_url()
+							network_admin_url()
 						)	// assumes recipient has access to Network Log
 					);
 
