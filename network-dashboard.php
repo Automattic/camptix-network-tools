@@ -12,11 +12,55 @@ class CampTix_Network_Dashboard {
 	}
 
 	function schedule_events() {
-		add_action( 'tix_dashboard_scheduled_hourly', array( $this, 'gather_events_data' ) );
+		add_action( 'tix_dashboard_scheduled_hourly', array( $this, 'update_revenue_reports_data' ) );
+		add_action( 'tix_dashboard_scheduled_hourly', array( $this, 'gather_events_data' ), 11 );	// priority 11 so it runs after revenue data refreshed
 
 		// wp_clear_scheduled_hook( 'tix_scheduled_hourly' );
 		if ( ! wp_next_scheduled( 'tix_dashboard_scheduled_hourly' ) )
 			wp_schedule_event( time(), 'hourly', 'tix_dashboard_scheduled_hourly' );
+	}
+
+	/*
+	 * Update the CampTix revenue report data
+	 *
+	 * CampTix only updates the data when the user visits the Tools > Revenue tab, because that's the only time it needs to be updated in a single instance.
+	 * In a Multisite network, though, CampTix Network Tools displays the data in the Overview tab, which can result in outdated and/or inaccurate data being
+	 * displayed unless an admin of each individual site visits their revenue report frequently. This function ensures that the data is current by
+	 * automatically updating it as part of a cron job
+	 */
+	function update_revenue_reports_data() {
+		global $wpdb, $camptix;
+
+		// The cron job may be fired from a site that doesn't have CampTix loaded, so only run if it is loaded
+		if ( method_exists( $camptix, 'generate_revenue_report_data' ) ) {
+			$remaining_blogs = get_site_option( 'camptix_nt_revenue_report_blog_ids', array() );
+			if ( empty( $remaining_blogs ) ) {
+				$remaining_blogs = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM `{$wpdb->blogs}` WHERE site_id = %d LIMIT 1000;", $wpdb->siteid ) );
+			}
+
+			$current_batch = array_splice( $remaining_blogs, 0, apply_filters( 'camptix_nt_revenue_report_batch_size', 30 ) );
+			$camptix->log( 'Updating next batch of revenue reports.' );
+
+			foreach ( $current_batch as $blog_id ) {
+				switch_to_blog( $blog_id );
+
+				if ( in_array( 'camptix/camptix.php', get_option( 'active_plugins', array() ) ) ) {
+					$camptix_options = get_option( 'camptix_options' );
+
+					if ( ! $camptix_options['archived'] ) {
+						$camptix->generate_revenue_report_data();
+					}
+				}
+
+				restore_current_blog();
+			}
+
+			if ( empty( $remaining_blogs ) ) {
+				delete_site_option( 'camptix_nt_revenue_report_blog_ids' );
+			} else {
+				update_site_option( 'camptix_nt_revenue_report_blog_ids', $remaining_blogs );
+			}
+		}
 	}
 
 	function gather_events_data() {
