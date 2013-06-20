@@ -14,6 +14,8 @@ Medium priority
 		or just prepare() it here, and cat it with $where below after $where runs through prepare()
 		also, maybe avoid doing the regular query if doing an advanced query
 	add note to network log search results to scroll down to see the highlighted entry. otherwise they might not realize it's there b/c it's below the fold.
+	setup cron jobs to schedule upon plugin activation and unschedule upon deactivation, rather than always firing in the constructor?
+	revisit limit of 1000 in sql queries for blog_ids. large networks like wordcamp.org could start running up against that. at least put a filter around the value
 
 Low priority
 	fire gather_events_data job whenever new site is added to network, or when camptix activated?
@@ -28,3 +30,4 @@ Low priority
 		put filter around 1000 limit. there are a few others places that need this too
 		being stored in redundantly individual tables rather than in global table
 	network log search for something like "id:refund" should probably return 0 results
+	remove reference to active_plugins filter since it's deprecated
