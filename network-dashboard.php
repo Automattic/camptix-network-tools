@@ -288,7 +288,6 @@ class CampTix_Network_Dashboard {
 		<form id="posts-filter" action="" method="get">
 			<input type="hidden" name="page" value="camptix-dashboard" />
 			<input type="hidden" name="tix_section" value="log" />
-			<?php wp_nonce_field( 'dashboard_log_search_logs', 'dashboard_log_search_logs_nonce' ); ?>
 
 			<?php $this->list_table->search_box( 'Search Logs', 'logs' ); ?>
 			<?php $this->list_table->display(); ?>
