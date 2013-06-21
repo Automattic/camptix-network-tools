@@ -31,6 +31,9 @@ class CampTix_Network_Dashboard {
 	function update_revenue_reports_data() {
 		global $wpdb, $camptix;
 
+		if ( get_site_option( 'camptix_nt_revenue_report_last_run', 0 ) > ( time() - HOUR_IN_SECONDS ) )
+			return;		// prevent the job from firing more often than intended because it'll be triggered by multiple sites in the network
+
 		// The cron job may be fired from a site that doesn't have CampTix loaded, so only run if it is loaded
 		if ( method_exists( $camptix, 'generate_revenue_report_data' ) ) {
 			$remaining_blogs = get_site_option( 'camptix_nt_revenue_report_blog_ids', array() );
@@ -55,6 +58,7 @@ class CampTix_Network_Dashboard {
 				restore_current_blog();
 			}
 
+			update_site_option( 'camptix_nt_revenue_report_last_run', time() );
 			if ( empty( $remaining_blogs ) ) {
 				delete_site_option( 'camptix_nt_revenue_report_blog_ids' );
 			} else {
