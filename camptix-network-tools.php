@@ -182,9 +182,16 @@ class CampTix_Network_Tools {
 		if ( $expressions ) {
 			foreach ( $expressions as $expression => $addresses ) {
 				if ( preg_match( $expression, $message .' '. print_r( $data, true ) ) ) {
+					if ( is_int( $post_id ) && $post_id > 0 ) {
+						$user = "\nUser: " . esc_html( get_the_title( $post_id ) ) . ' (<'. esc_url_raw( get_edit_post_link( $post_id, '' ) ) .'>)';
+					} else {
+						$user = '';
+					}
+
 					$email_body = sprintf(
-						"The following CampTix log entry matches an expression you've subscribed to.\n\nSite: %s\nMessage: %s\nRegular Expression: %s\nTimestamp: %s\n\nMore information is available in the Network Log: <%s>",
+						"The following CampTix log entry matches an expression you've subscribed to.\n\nSite: %s%s\nMessage: %s\nRegular Expression: %s\nTimestamp: %s\n\nMore information is available in the Network Log: <%s>",
 						get_bloginfo( 'name' ),
+						$user,
 						esc_html( $message ),
 						esc_html( $expression ),
 						date( 'Y-m-d H:i:s' ),	// assumes MySQL timezone matches PHP timezone, and that next clock tick hasn't occurred after record insertion
