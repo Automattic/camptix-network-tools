@@ -183,7 +183,7 @@ class CampTix_Network_Tools {
 			foreach ( $expressions as $expression => $addresses ) {
 				if ( preg_match( $expression, $message .' '. print_r( $data, true ) ) ) {
 					if ( is_int( $post_id ) && $post_id > 0 ) {
-						$user = "\nUser: " . esc_html( get_the_title( $post_id ) ) . ' (<'. esc_url_raw( get_edit_post_link( $post_id, '' ) ) .'>)';
+						$user = "\nUser: " . esc_html( get_the_title( $post_id ) ) . ' (<'. esc_url_raw( get_admin_url( null, '/post.php?post='. $post_id .'&action=edit' ) ) .'>)';
 					} else {
 						$user = '';
 					}
